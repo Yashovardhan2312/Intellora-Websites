@@ -80,5 +80,5 @@ After this, every change pushed to `main` goes live automatically within a minut
 - Edit the text directly in `public/index.html`.
 - Colours and fonts are CSS variables at the top of `public/assets/css/app.css` (`--primary`, `--background`, ...).
 - Preview locally: `npm install`, then `npx wrangler dev --local-protocol https`.
-- The most exact way to get the full site (all pages and the original animations) is to export the project's source code from
-  Airo and deploy that build instead of this static copy.
+- To get the full site (all pages and the original animations) exactly, check whether Airo offers a code download or a GitHub
+  export, and deploy that build instead of this static copy.
