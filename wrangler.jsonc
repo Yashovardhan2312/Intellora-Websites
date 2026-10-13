@@ -1,6 +1,6 @@
 {
   "$schema": "./node_modules/wrangler/config-schema.json",
-  "name": "intellora-website",
+  "name": "intellora-websites",
   "main": "src/worker.js",
   "compatibility_date": "2026-10-13",
   "assets": {

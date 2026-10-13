@@ -18,19 +18,34 @@ Plain HTML, CSS and JavaScript. There is no build step and no framework.
 
 ## Go live on Cloudflare (one-time, about 10 minutes)
 
-The domain is already on Cloudflare. The domain names are listed in `wrangler.jsonc`, so deploying attaches them for you.
+The domain is already on Cloudflare. Both domain names are listed in `wrangler.jsonc`, so deploying should attach them for you.
 
 1. Cloudflare dashboard → **Workers & Pages** → **Create application** → **Get started** next to **Import a repository**.
 2. Choose your GitHub account and the `Intellora-Websites` repository.
 3. Settings on the next screen:
-   - **Project name:** `intellora-website` (must match the `name` in `wrangler.jsonc` exactly, or the build fails)
+   - **Project name:** `intellora-websites` (must match the `name` in `wrangler.jsonc` exactly, or the build fails)
    - **Production branch:** `main`
    - **Build command:** leave empty
    - **Deploy command:** `npx wrangler deploy` (the default)
 4. Click **Save and Deploy**.
 5. Open `https://www.intellora.co.in` and `https://intellora.co.in` (the second should jump to the first).
 
-**If the deploy complains about a DNS conflict:** Cloudflare cannot attach a custom domain to a name that already has a DNS record. Go to the domain → **DNS** → **Records**, delete the existing record for `www` (and for the bare domain, if listed), then retry the deployment.
+### If the build log says a domain could not be attached
+
+Attach the domains by hand instead:
+
+1. **Workers & Pages** → click `intellora-websites` → **Settings** → **Domains & Routes** → **Add** → **Custom Domain**.
+2. Enter `www.intellora.co.in` and add it.
+3. Repeat for `intellora.co.in`.
+
+### If Cloudflare reports a DNS conflict
+
+Cloudflare cannot attach a custom domain to a name that already has a conflicting DNS record.
+
+- Go to the domain → **DNS** → **Records**.
+- Delete **only** an `A`, `AAAA` or `CNAME` record whose **Name** is exactly `www` or `intellora.co.in`.
+- **Never delete `MX` or `TXT` records.** They run your email (`@intellora.co.in`) and its security checks.
+- Then retry the deployment.
 
 After this, every change pushed to `main` goes live automatically within a minute or two.
 
