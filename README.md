@@ -4,43 +4,43 @@ Marketing site for **Intellora Innovations** ("Intelligence Reimagined") and its
 Live address: <https://www.intellora.co.in>
 
 This is a static copy of the design saved from the Airo preview (`b5jrtj7zm0.preview.c35.airoapp.ai`). The markup and the
-compiled Tailwind stylesheet are taken from that saved page unchanged. There is no build step and no framework.
+compiled Tailwind stylesheet are taken from the saved pages unchanged. There is no build step and no framework.
 
 ## What is in here
 
 | Path | Purpose |
 |---|---|
-| `public/index.html` | The home page |
-| `public/404.html` | Temporary page shown for every route that has not been supplied yet (see below) |
-| `public/assets/css/app.css` | The original compiled stylesheet (Tailwind, colours, fonts) |
-| `public/assets/js/app.js` | Scroll reveal, header-on-scroll and mobile menu (reconstructed, see below) |
+| `public/index.html`, `forksight.html`, `solutions.html`, `about.html`, `contact.html` | The five pages (served at `/`, `/forksight`, `/solutions`, `/about`, `/contact`) |
+| `public/404.html` | Temporary page for `/privacy`, which has not been supplied yet |
+| `public/assets/css/app.css` | The original compiled stylesheet (identical across all five saved pages) |
+| `public/assets/js/app.js` | Scroll reveal, header-on-scroll, mobile menu and contact form (reconstructed, see below) |
+| `public/assets/img/logo-dark.png` | The Intellora logo, from your upload |
 | `public/_headers` | Security headers and Content-Security-Policy |
 | `src/worker.js` | Redirects `http` to `https` and `intellora.co.in` to `www.intellora.co.in`, then serves `public/` |
 | `wrangler.jsonc` | Cloudflare deploy settings, including both domain names |
 
 ## Not yet included (needs your input)
 
-The saved page only contained the **home page**. These pages are linked from the menu but their content was not in the file,
-so they currently show the temporary "Coming soon" page (which gives the email address and phone number):
-
-- `/forksight`, `/solutions`, `/about`, `/contact`, `/privacy`
-
-Also missing from the saved page, so stand-ins are used:
-
-- **Logo image.** The saved page referenced it but did not include the file. `public/assets/img/logo-dark.svg` is a placeholder.
-- **Social share image** (`/og-image.png`) and **favicon** (`/favicon.svg`, `/apple-touch-icon.png`): placeholders.
+- **Privacy Policy** (`/privacy`). It is linked from every footer, but its saved page was not supplied. Visitors currently see a
+  temporary "Coming soon" page with the email address and phone number.
+- **Favicon, apple-touch icon and social share image** (`favicon.png`, `apple-touch-icon.png`, `og-image.png`). The originals were not
+  in the saved pages. These are made from your logo and the site colours.
 
 ## How this copy differs from the Airo preview
 
-- **Behaviour is reconstructed.** The original is a React app. The saved page holds its final markup but not its component code.
-  The scroll fade-in, the header background on scroll, and the mobile menu in `app.js` are rebuilt from what the markup shows.
-  Timing and stagger are approximations.
+- **Behaviour is reconstructed.** The original is a React app. The saved pages hold its final markup but not its component code.
+  The scroll fade-in, the header background on scroll, the mobile menu and the contact form in `app.js` are rebuilt from what the
+  markup shows. Timing and stagger are approximations.
+- **The contact form opens the visitor's email app** with a pre-filled message to `yashovardhan.singh@intellora.co.in`. The saved page
+  does not show where the original sent submissions (its hidden `_gotcha` field is the convention used by form-handling services).
+  If you tell us the service and endpoint, the form can post there instead.
 - **Canonical and social URLs use `https://www.intellora.co.in`** (the original used `https://intellora.co.in`), because the apex
   address redirects to `www`.
-- **Airo tooling is removed** (dev overlay, analytics and session-recording scripts, a preview-domain JSON-LD block).
+- **Airo tooling is removed**: the dev overlay, FullStory session recording, the analytics bundle, the media patch scripts, and a
+  preview-domain JSON-LD block. The site therefore records no visitor sessions.
 - **The Content-Security-Policy allows inline styles and Google Fonts.** The original design depends on both.
-- **Known accessibility finding inherited from the design:** white text on the teal "Request a Demo" button has a contrast
-  ratio below the WCAG AA minimum. It was left as designed.
+- **Known accessibility finding inherited from the design:** white text on the teal buttons has a contrast ratio of 2.26:1, below the
+  WCAG AA minimum of 4.5:1. It was left as designed.
 
 ## Go live on Cloudflare (one-time, about 10 minutes)
 

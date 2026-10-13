@@ -137,3 +137,101 @@
     if (e.matches) setOpen(false);
   });
 })();
+
+/*
+ * Contact form (contact page only).
+ * The saved page contains the form markup but not its submit handler, so how the original delivered messages is unknown.
+ * This version validates the required fields, then opens the visitor's email app with the message pre-filled and
+ * addressed to the founder. Nothing is stored on a server.
+ */
+(function () {
+  "use strict";
+  var form = document.querySelector("main form");
+  if (!form || !form.elements.businessName) return;
+
+  var EMAIL = "yashovardhan.singh@intellora.co.in";
+  var EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+  var LIMITS = { name: 100, businessName: 120, email: 254, phone: 30, businessType: 60, message: 2000 };
+
+  function val(name) {
+    var el = form.elements[name];
+    return el ? String(el.value || "").trim().slice(0, LIMITS[name] || 200) : "";
+  }
+
+  function clearErrors() {
+    Array.prototype.forEach.call(form.querySelectorAll("[data-form-error]"), function (n) {
+      n.remove();
+    });
+    Array.prototype.forEach.call(form.querySelectorAll("[aria-invalid]"), function (n) {
+      n.removeAttribute("aria-invalid");
+    });
+  }
+
+  function fail(name, message) {
+    var el = form.elements[name];
+    var p = document.createElement("p");
+    p.className = "text-xs";
+    p.style.color = "hsl(var(--destructive))";
+    p.setAttribute("data-form-error", "");
+    p.id = "err-" + name;
+    p.textContent = message;
+    el.setAttribute("aria-invalid", "true");
+    el.setAttribute("aria-describedby", p.id);
+    el.parentNode.appendChild(p);
+  }
+
+  form.addEventListener("submit", function (event) {
+    event.preventDefault();
+    if (val("_gotcha")) return; // honeypot filled in: ignore
+
+    clearErrors();
+    var ok = true;
+    if (!val("name")) { fail("name", "Please enter your name."); ok = false; }
+    if (!val("businessName")) { fail("businessName", "Please enter your business name."); ok = false; }
+    if (!EMAIL_RE.test(val("email"))) { fail("email", "Please enter a valid email address."); ok = false; }
+    if (!val("message")) { fail("message", "Please tell us a little about what you need."); ok = false; }
+    if (!ok) {
+      var first = form.querySelector('[aria-invalid="true"]');
+      if (first) first.focus();
+      return;
+    }
+
+    var type = val("businessType");
+    var lines = [
+      "Name: " + val("name"),
+      "Business: " + val("businessName"),
+      "Business type: " + (type || "-"),
+      "Email: " + val("email"),
+      "Phone: " + (val("phone") || "-"),
+      "",
+      form.elements.message.value.trim().slice(0, LIMITS.message),
+    ];
+    var href =
+      "mailto:" + EMAIL +
+      "?subject=" + encodeURIComponent("Demo request from " + val("name") + " (" + val("businessName") + ")") +
+      "&body=" + encodeURIComponent(lines.join("\n"));
+
+    var old = form.querySelector("[data-form-status]");
+    if (old) old.remove();
+    var box = document.createElement("div");
+    box.setAttribute("data-form-status", "");
+    box.setAttribute("role", "status");
+    box.tabIndex = -1;
+    box.className = "rounded-lg p-4 border border-border/70 text-sm text-muted-foreground flex flex-col gap-3";
+    var msg = document.createElement("p");
+    msg.textContent =
+      "Almost done. Your email app should open with your message ready to send. If it did not, use the button below.";
+    var link = document.createElement("a");
+    link.href = href;
+    link.textContent = "Open email with my message";
+    link.className = "inline-flex items-center justify-center px-6 py-3 text-sm font-semibold rounded-lg text-primary-foreground w-fit";
+    link.style.background = "hsl(var(--primary))";
+    var direct = document.createElement("p");
+    direct.className = "text-xs";
+    direct.textContent = "Or write to " + EMAIL + " or call +91 96645 45993.";
+    box.append(msg, link, direct);
+    form.appendChild(box);
+    box.focus();
+    window.location.href = href;
+  });
+})();
