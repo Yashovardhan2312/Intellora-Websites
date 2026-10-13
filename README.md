@@ -3,18 +3,44 @@
 Marketing site for **Intellora Innovations** ("Intelligence Reimagined") and its product **ForkSight**.
 Live address: <https://www.intellora.co.in>
 
-Plain HTML, CSS and JavaScript. There is no build step and no framework.
+This is a static copy of the design saved from the Airo preview (`b5jrtj7zm0.preview.c35.airoapp.ai`). The markup and the
+compiled Tailwind stylesheet are taken from that saved page unchanged. There is no build step and no framework.
 
 ## What is in here
 
 | Path | Purpose |
 |---|---|
-| `public/` | The website itself. Everything here is served as-is. |
-| `public/index.html`, `public/<page>/index.html` | Home, ForkSight, Solutions, About, Contact, Privacy |
-| `public/assets/` | Styles, scripts, logo, share image |
-| `public/_headers` | Security headers (including a strict Content-Security-Policy) |
+| `public/index.html` | The home page |
+| `public/404.html` | Temporary page shown for every route that has not been supplied yet (see below) |
+| `public/assets/css/app.css` | The original compiled stylesheet (Tailwind, colours, fonts) |
+| `public/assets/js/app.js` | Scroll reveal, header-on-scroll and mobile menu (reconstructed, see below) |
+| `public/_headers` | Security headers and Content-Security-Policy |
 | `src/worker.js` | Redirects `http` to `https` and `intellora.co.in` to `www.intellora.co.in`, then serves `public/` |
 | `wrangler.jsonc` | Cloudflare deploy settings, including both domain names |
+
+## Not yet included (needs your input)
+
+The saved page only contained the **home page**. These pages are linked from the menu but their content was not in the file,
+so they currently show the temporary "Coming soon" page (which gives the email address and phone number):
+
+- `/forksight`, `/solutions`, `/about`, `/contact`, `/privacy`
+
+Also missing from the saved page, so stand-ins are used:
+
+- **Logo image.** The saved page referenced it but did not include the file. `public/assets/img/logo-dark.svg` is a placeholder.
+- **Social share image** (`/og-image.png`) and **favicon** (`/favicon.svg`, `/apple-touch-icon.png`): placeholders.
+
+## How this copy differs from the Airo preview
+
+- **Behaviour is reconstructed.** The original is a React app. The saved page holds its final markup but not its component code.
+  The scroll fade-in, the header background on scroll, and the mobile menu in `app.js` are rebuilt from what the markup shows.
+  Timing and stagger are approximations.
+- **Canonical and social URLs use `https://www.intellora.co.in`** (the original used `https://intellora.co.in`), because the apex
+  address redirects to `www`.
+- **Airo tooling is removed** (dev overlay, analytics and session-recording scripts, a preview-domain JSON-LD block).
+- **The Content-Security-Policy allows inline styles and Google Fonts.** The original design depends on both.
+- **Known accessibility finding inherited from the design:** white text on the teal "Request a Demo" button has a contrast
+  ratio below the WCAG AA minimum. It was left as designed.
 
 ## Go live on Cloudflare (one-time, about 10 minutes)
 
@@ -51,16 +77,8 @@ After this, every change pushed to `main` goes live automatically within a minut
 
 ## Making changes
 
-- Edit the text directly in the HTML files under `public/`.
-- The header and footer are repeated in every page. If you change the menu or footer, change it in all six pages.
-- Colours and fonts are at the top of `public/assets/css/styles.css`.
+- Edit the text directly in `public/index.html`.
+- Colours and fonts are CSS variables at the top of `public/assets/css/app.css` (`--primary`, `--background`, ...).
 - Preview locally: `npm install`, then `npx wrangler dev --local-protocol https`.
-
-## Things to review before promoting the site
-
-- **Solutions page** uses general descriptions. Replace with your actual service list.
-- **Privacy Policy** is a plain-language starting point. Have it reviewed against your legal obligations.
-- **Contact form** opens the visitor's email app with a pre-filled message to the founder's address. Nothing is stored on a server, so no secrets or databases are involved. If you later want submissions delivered without the visitor's email app, add a form endpoint (for example a Cloudflare Worker route plus an email service) in `src/worker.js`.
-- **Illustrative graphics** (forecast chart, stock plan) are clearly labelled "Illustrative" and use no real data.
-- **No analytics or tracking** is included. The Content-Security-Policy in `public/_headers` blocks third-party scripts, so adding analytics needs a matching policy change.
-- ForkSight is described as in active development. Update the wording when it has customers or results to show.
+- The most exact way to get the full site (all pages and the original animations) is to export the project's source code from
+  Airo and deploy that build instead of this static copy.
