@@ -10,21 +10,19 @@ compiled Tailwind stylesheet are taken from the saved pages unchanged. There is 
 
 | Path | Purpose |
 |---|---|
-| `public/index.html`, `forksight.html`, `solutions.html`, `about.html`, `contact.html` | The five pages (served at `/`, `/forksight`, `/solutions`, `/about`, `/contact`) |
-| `public/404.html` | Temporary page for `/privacy`, which has not been supplied yet |
-| `public/assets/css/app.css` | The original compiled stylesheet (identical across all five saved pages) |
+| `public/index.html`, `forksight.html`, `solutions.html`, `about.html`, `contact.html`, `privacy.html` | The six pages (served at `/`, `/forksight`, `/solutions`, `/about`, `/contact`, `/privacy`) |
+| `public/404.html` | "Page not found" page. The original's 404 was not in the saved pages, so this one is a stand-in in the same style |
+| `public/assets/css/app.css` | The original compiled stylesheet (identical across all six saved pages) |
 | `public/assets/js/app.js` | Scroll reveal, header-on-scroll, mobile menu and contact form (reconstructed, see below) |
 | `public/assets/img/logo-dark.png` | The Intellora logo, from your upload |
 | `public/_headers` | Security headers and Content-Security-Policy |
 | `src/worker.js` | Redirects `http` to `https` and `intellora.co.in` to `www.intellora.co.in`, then serves `public/` |
 | `wrangler.jsonc` | Cloudflare deploy settings, including both domain names |
 
-## Not yet included (needs your input)
+## Stand-ins (not in the saved pages)
 
-- **Privacy Policy** (`/privacy`). It is linked from every footer, but its saved page was not supplied. Visitors currently see a
-  temporary "Coming soon" page with the email address and phone number.
-- **Favicon, apple-touch icon and social share image** (`favicon.png`, `apple-touch-icon.png`, `og-image.png`). The originals were not
-  in the saved pages. These are made from your logo and the site colours.
+- **Favicon, apple-touch icon and social share image** (`favicon.png`, `apple-touch-icon.png`, `og-image.png`), made from your logo and the site colours.
+- **404 page** (`404.html`), in the same style as the site.
 
 ## How this copy differs from the Airo preview
 
@@ -39,7 +37,7 @@ compiled Tailwind stylesheet are taken from the saved pages unchanged. There is 
 - **Airo tooling is removed**: the dev overlay, FullStory session recording, the analytics bundle, the media patch scripts, and a
   preview-domain JSON-LD block. The site therefore records no visitor sessions.
 - **The Content-Security-Policy allows inline styles and Google Fonts.** The original design depends on both.
-- **Known accessibility finding inherited from the design:** white text on the teal buttons has a contrast ratio of 2.26:1, below the
+- **Known accessibility findings inherited from the design:** the Privacy page's contents list is an `<ol>` whose children include wrapper `<div>`s, which strict list checks flag. Also, white text on the teal buttons has a contrast ratio of 2.26:1, below the
   WCAG AA minimum of 4.5:1. It was left as designed.
 
 ## Go live on Cloudflare (one-time, about 10 minutes)
